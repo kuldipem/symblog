@@ -1,0 +1,51 @@
+BloggerBlogBundle_advance_search:
+    pattern: /advanceSearch
+    defaults: { _controller: BloggerBlogBundle:Search:AdvanceSearch }
+    requirements:
+      _method: GET
+
+BloggerBlogBundle_search_search:
+    pattern: /search
+    defaults: { _controller: BloggerBlogBundle:Search:search }
+    requirements:
+      _method: GET
+#      fieldName: \w+
+#      keyword: \w+
+
+BloggerBlogBundle_blog_tag_filter:
+    pattern:  blog/tag/{tag}
+    defaults: { _controller: BloggerBlogBundle:Blog:tagFilter }
+    requirements:
+        _method:  GET
+        
+    
+BloggerBlogBundle_blog_create:
+    pattern:  /{id}/{slug}
+    defaults: { _controller: BloggerBlogBundle:Blog:show }
+    requirements:
+        _method:  GET
+        id: \d+
+
+    
+BloggerBlogBundle_blog_show:
+    pattern:  /{id}/{slug}
+    defaults: { _controller: BloggerBlogBundle:Blog:show }
+    requirements:
+        _method:  GET
+        id: \d+
+      
+BloggerBlogBundle_homepage:
+    pattern:  /
+    defaults: { _controller: BloggerBlogBundle:Page:index }
+    requirements:
+        _method:  GET
+BloggerBlogBundle_about:
+    pattern:  /about
+    defaults: { _controller: BloggerBlogBundle:Page:about }
+    requirements:
+        _method:  GET
+BloggerBlogBundle_contact:
+    pattern:  /contact
+    defaults: { _controller: BloggerBlogBundle:Page:contact }
+    requirements:
+        _method:  GET|POST

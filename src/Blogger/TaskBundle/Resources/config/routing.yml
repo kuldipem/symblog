@@ -1,0 +1,9 @@
+BloggerTaskBundle_task:
+    pattern: /task
+    defaults: { _controller: BloggerTaskBundle:Task:new }
+
+BloggerTaskBundle_task_success:
+    pattern: /task
+    defaults: { _controller: BloggerTaskBundle:Task:new }
+    
+      

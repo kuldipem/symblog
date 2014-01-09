@@ -1,0 +1,17 @@
+{% block navigation %}
+<nav>
+    <ul class="navigation">
+        <li><a href="{{ path("BloggerBlogBundle_homepage") }}">Home</a></li>
+        <li><a href="{{ path("BloggerBlogBundle_about") }}">About</a></li>
+        <li><a href="{{ path("BloggerBlogBundle_contact") }}">Contact</a></li>
+                {% if is_granted('ROLE_USER') %}
+                        <li><a href="#" >My Blogs</a></li>
+                        <li><a href="#" >My Profile</a></li>
+                        <li><a href="{{ path("logout") }}" >Logout</a></li>
+                {% else %}
+                        <li><a href="{{ path("register") }}" >Register</a></li>
+                        <li><a href="{{ path("login") }}" >Login</a></li>
+                {% endif %}
+    </ul>
+</nav>
+{% endblock %} 

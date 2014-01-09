@@ -1,0 +1,16 @@
+
+BloggerUserBundle_user:
+    pattern: /user
+    defaults: { _controller: BloggerUserBundle:User:index }
+    requirements:
+      _method: GET
+
+register:
+    pattern: /register
+    defaults: { _controller: BloggerUserBundle:User:register }
+
+handle_register:
+    pattern: /handle_register
+    defaults: { _controller: BloggerUserBundle:User:handleRegister }
+    
+

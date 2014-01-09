@@ -1,0 +1,19 @@
+blogger_task:
+    resource: "@BloggerTaskBundle/Resources/config/routing.yml"
+    prefix:   /
+
+blogger_user:
+    resource: "@BloggerUserBundle/Resources/config/routing.yml"
+    prefix:   /
+    
+blogger_blog:
+    resource: "@BloggerBlogBundle/Resources/config/routing.yml"
+    prefix:   /
+login:
+    pattern: /login
+    defaults: { _controller: BloggerUserBundle:User:login }
+login_check:
+    pattern: /login_check
+logout:
+    pattern: /logout
+    
