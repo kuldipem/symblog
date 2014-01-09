@@ -3,6 +3,13 @@ BloggerUserBundle_reset_password_email_link:
     defaults: { _controller: BloggerUserBundle:Security:confirmResetCode }
     requirements:
       tech: link|code
+
+
+BloggerUserBundle_reset_newpassword:
+    pattern: /resetpassword/{id}/newpassword/{resetcode}
+    defaults: { _controller: BloggerUserBundle:Security:newPassword }
+    requirements:
+      id: \d+
     
 #BloggerUserBundle_reset_password:
 #    pattern: /resetpassword/{using}
