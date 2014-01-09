@@ -562,4 +562,27 @@ class User implements AdvancedUserInterface, Serializable, EquatableInterface {
         return __DIR__ . "/../../../../web/" . $this->getUploadDir();
     }
 
+
+    /**
+     * Set security
+     *
+     * @param \Blogger\UserBundle\Entity\UserSecurity $security
+     * @return User
+     */
+    public function setSecurity(\Blogger\UserBundle\Entity\UserSecurity $security = null)
+    {
+        $this->security = $security;
+    
+        return $this;
+    }
+
+    /**
+     * Get security
+     *
+     * @return \Blogger\UserBundle\Entity\UserSecurity 
+     */
+    public function getSecurity()
+    {
+        return $this->security;
+    }
 }

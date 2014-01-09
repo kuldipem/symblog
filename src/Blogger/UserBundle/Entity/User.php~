@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * User
@@ -129,6 +130,14 @@ class User implements AdvancedUserInterface, Serializable, EquatableInterface {
      * @ORM\OneToMany(targetEntity="Blogger\BlogBundle\Entity\Likes", mappedBy="user")
      */
     protected $likes;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="UserSecurity", mappedBy="user" )
+     */
+    protected $security;
+    
+
+
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -506,6 +515,51 @@ class User implements AdvancedUserInterface, Serializable, EquatableInterface {
      */
     public function getLikes() {
         return $this->likes;
+    }
+
+    /**
+     * Set image
+     *
+     * @param string $image
+     * @return User
+     */
+    public function setImage($image) {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return string 
+     */
+    public function getImage() {
+        return $this->image;
+    }
+
+    public function setFile(UploadedFile $file) {
+        $this->file = $file;
+    }
+
+    public function getFile() {
+        return $this->file;
+    }
+
+    public static function getAbsolutePath() {
+        return null === $this->image ? null : $this->getUploadRootDir() . '/' . $this->image;
+    }
+
+    public static function getWebPath() {
+        return null === $this->image ? null : $this->getUploadDir() . '/' . $this->image;
+    }
+
+    public static function getUploadDir() {
+        return "upload/user_images";
+    }
+
+    public static function getUploadRootDir() {
+        return __DIR__ . "/../../../../web/" . $this->getUploadDir();
     }
 
 }
