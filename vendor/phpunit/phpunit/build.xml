@@ -23,6 +23,7 @@
  </target>
 
  <target name="clean" description="Cleanup build artifacts">
+  <delete dir="${basedir}/bin"/>
   <delete dir="${basedir}/vendor"/>
   <delete file="${basedir}/composer.lock"/>
   <delete file="${basedir}/composer.phar"/>
@@ -168,13 +169,11 @@
 
  <target name="phar"
          description="Create PHAR archive of PHPUnit and all its dependencies"
-         depends="clean">
-  <mkdir dir="${basedir}/build/phar"/>
+         depends="phar-prepare,phar-build">
+ </target>
 
-  <exec executable="bash" outputproperty="version">
-   <arg value="-c" />
-   <arg value="${basedir}/phpunit.php --version | awk 'BEGIN { ORS = &quot;&quot;; } {print $2}'" />
-  </exec>
+ <target name="phar-prepare" depends="clean">
+  <mkdir dir="${basedir}/build/phar"/>
 
   <get src="https://getcomposer.org/composer.phar" dest="${basedir}/composer.phar"/>
 
@@ -208,52 +207,45 @@
 
   <move file="${basedir}/composer.json.bak" tofile="${basedir}/composer.json"/>
 
-  <copy todir="${basedir}/build/phar/phpunit">
-   <fileset dir="${basedir}/PHPUnit">
-    <include name="**/*.php" />
-    <exclude name="**/autoload.php" />
-   </fileset>
-  </copy>
-
   <copy todir="${basedir}/build/phar/php-code-coverage">
    <fileset dir="${basedir}/vendor/phpunit/php-code-coverage/PHP">
-    <include name="**/*.php" />
-    <exclude name="**/autoload.php" />
+    <include name="**/*" />
+    <exclude name="**/Autoload.*" />
    </fileset>
   </copy>
 
   <copy todir="${basedir}/build/phar/php-file-iterator">
    <fileset dir="${basedir}/vendor/phpunit/php-file-iterator/File">
     <include name="**/*.php" />
-    <exclude name="**/autoload.php" />
+    <exclude name="**/Autoload.*" />
    </fileset>
   </copy>
 
   <copy todir="${basedir}/build/phar/php-text-template">
    <fileset dir="${basedir}/vendor/phpunit/php-text-template/Text">
     <include name="**/*.php" />
-    <exclude name="**/autoload.php" />
+    <exclude name="**/Autoload.*" />
    </fileset>
   </copy>
 
   <copy todir="${basedir}/build/phar/php-timer">
    <fileset dir="${basedir}/vendor/phpunit/php-timer/PHP">
     <include name="**/*.php" />
-    <exclude name="**/autoload.php" />
+    <exclude name="**/Autoload.*" />
    </fileset>
   </copy>
 
   <copy todir="${basedir}/build/phar/php-token-stream">
    <fileset dir="${basedir}/vendor/phpunit/php-token-stream/PHP">
     <include name="**/*.php" />
-    <exclude name="**/autoload.php" />
+    <exclude name="**/Autoload.*" />
    </fileset>
   </copy>
 
   <copy todir="${basedir}/build/phar/phpunit-mock-objects">
    <fileset dir="${basedir}/vendor/phpunit/phpunit-mock-objects/PHPUnit">
-    <include name="**/*.php" />
-    <exclude name="**/autoload.php" />
+    <include name="**/*" />
+    <exclude name="**/Autoload.*" />
    </fileset>
   </copy>
 
@@ -273,21 +265,36 @@
   <copy todir="${basedir}/build/phar/dbunit">
    <fileset dir="${basedir}/vendor/phpunit/dbunit/PHPUnit">
     <include name="**/*.php" />
-    <exclude name="**/autoload.php" />
+    <exclude name="**/Autoload.*" />
    </fileset>
   </copy>
 
   <copy todir="${basedir}/build/phar/php-invoker">
    <fileset dir="${basedir}/vendor/phpunit/php-invoker/PHP">
     <include name="**/*.php" />
-    <exclude name="**/autoload.php" />
+    <exclude name="**/Autoload.*" />
    </fileset>
   </copy>
 
   <copy todir="${basedir}/build/phar/phpunit-selenium">
    <fileset dir="${basedir}/vendor/phpunit/phpunit-selenium/PHPUnit">
     <include name="**/*.php" />
-    <exclude name="**/autoload.php" />
+    <exclude name="**/Autoload.*" />
+   </fileset>
+  </copy>
+ </target>
+
+ <target name="phar-build">
+  <exec executable="bash" outputproperty="version">
+   <arg value="-c" />
+   <arg value="${basedir}/phpunit.php --version | awk 'BEGIN { ORS = &quot;&quot;; } {print $2}'" />
+  </exec>
+
+  <copy todir="${basedir}/build/phar/phpunit">
+   <fileset dir="${basedir}/PHPUnit">
+    <include name="**/*.php" />
+    <include name="**/*.tpl*" />
+    <exclude name="**/Autoload.*" />
    </fileset>
   </copy>
 
@@ -304,11 +311,5 @@
   </exec>
 
   <chmod file="${basedir}/build/phpunit-${version}.phar" perm="ugo+rx"/>
-
-  <delete dir="${basedir}/build/phar"/>
-  <delete dir="${basedir}/bin"/>
-  <delete dir="${basedir}/vendor"/>
-  <delete file="${basedir}/composer.lock"/>
-  <delete file="${basedir}/composer.phar"/>
  </target>
 </project>

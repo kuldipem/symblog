@@ -16,15 +16,33 @@ namespace Blogger\BlogBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Blogger\BlogBundle\Entity\Enquiry;
 use Blogger\BlogBundle\Form\EnquiryType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 
 class PageController extends Controller {
 
     public function indexAction() {
 
         $em = $this->getDoctrine()->getManager();
-        $blogs = $em->getRepository("BloggerBlogBundle:Blog")->getLatestBlogs();
+        $q = "SELECT b FROM BloggerBlogBundle:Blog b";
+        $qur = $em->createQuery($q);
+        $paginator = $this->get("knp_paginator");
 
-        return $this->render('BloggerBlogBundle:Page:index.html.twig', array("blogs" => $blogs));
+        $pagination = $paginator->paginate($qur, $this->getRequest()->query->get("page", 1), 5);
+//        $blogs = $em->getRepository("BloggerBlogBundle:Blog")->getLatestBlogs();
+
+        return $this->render('BloggerBlogBundle:Page:index.html.twig', array("blogs" => $pagination));
+    }
+
+    public function advanceHomeAction() {
+        $em = $this->getDoctrine()->getManager();
+        $q = "SELECT b FROM BloggerBlogBundle:Blog b";
+        $qur = $em->createQuery($q);
+        $paginator = $this->get("knp_paginator");
+
+        $pagination = $paginator->paginate($qur, $this->getRequest()->query->get("page", 1), 5);
+//        $blogs = $em->getRepository("BloggerBlogBundle:Blog")->getLatestBlogs();
+
+        return $this->render('BloggerBlogBundle:Page:advanceHome.html.twig', array("blogs" => $pagination));
     }
 
     public function aboutAction() {

@@ -5,10 +5,13 @@ namespace Blogger\UserBundle\Entity;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Serializable;
-use Symfony\Component\Security\Core\User\AdvancedUserInterface;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * User
@@ -18,7 +21,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity(fields="email", message="Email is already taken.")
  * @UniqueEntity(fields="username", message="Username is already used.")
  */
-class User implements AdvancedUserInterface, Serializable {
+class User implements AdvancedUserInterface, Serializable, EquatableInterface {
 
     /**
      * @var integer
@@ -113,14 +116,50 @@ class User implements AdvancedUserInterface, Serializable {
      */
     private $isActive;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Blogger\BlogBundle\Entity\Blog", mappedBy="user")
+     */
+    protected $blogs;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Blogger\BlogBundle\Entity\Comment", mappedBy="user")
+     */
+    protected $comments;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Blogger\BlogBundle\Entity\Likes", mappedBy="user")
+     */
+    protected $likes;
     
+    /**
+     * @ORM\OneToOne(targetEntity="UserSecurity", mappedBy="user" )
+     */
+    protected $security;
+    
+
+
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    protected $image;
+
+
+    /*
+     * @Assert\File(maxSize="6000000")
+     */
+    private $file;
+
+    public function __toString() {
+        return $this->getUsername();
+    }
+
     public function __construct() {
         $this->isActive = true;
         $this->salt = md5(uniqid(null, true));
-        $this->roles=array('ROLE_USER');
+        $this->roles = array('ROLE_USER');
     }
-    
-    
+
     /**
      * Get id
      *
@@ -312,12 +351,18 @@ class User implements AdvancedUserInterface, Serializable {
     public function serialize() {
         return serialize(array(
             $this->id,
+            $this->username,
+            $this->salt,
+            $this->password,
         ));
     }
 
     public function unserialize($serialized) {
         list (
                 $this->id,
+                $this->username,
+                $this->salt,
+                $this->password,
                 ) = unserialize($serialized);
     }
 
@@ -376,6 +421,145 @@ class User implements AdvancedUserInterface, Serializable {
      */
     public function getIsActive() {
         return $this->isActive;
+    }
+
+    public function isEqualTo(UserInterface $user) {
+        return $this->id === $user->getId();
+    }
+
+    /**
+     * Add blogs
+     *
+     * @param \Blogger\BlogBundle\Entity\Blog $blogs
+     * @return User
+     */
+    public function addBlog(\Blogger\BlogBundle\Entity\Blog $blogs) {
+        $this->blogs[] = $blogs;
+
+        return $this;
+    }
+
+    /**
+     * Remove blogs
+     *
+     * @param \Blogger\BlogBundle\Entity\Blog $blogs
+     */
+    public function removeBlog(\Blogger\BlogBundle\Entity\Blog $blogs) {
+        $this->blogs->removeElement($blogs);
+    }
+
+    /**
+     * Get blogs
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBlogs() {
+        return $this->blogs;
+    }
+
+    /**
+     * Add comments
+     *
+     * @param \Blogger\BlogBundle\Entity\Comment $comments
+     * @return User
+     */
+    public function addComment(\Blogger\BlogBundle\Entity\Comment $comments) {
+        $this->comments[] = $comments;
+
+        return $this;
+    }
+
+    /**
+     * Remove comments
+     *
+     * @param \Blogger\BlogBundle\Entity\Comment $comments
+     */
+    public function removeComment(\Blogger\BlogBundle\Entity\Comment $comments) {
+        $this->comments->removeElement($comments);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getComments() {
+        return $this->comments;
+    }
+
+    /**
+     * Add likes
+     *
+     * @param \Blogger\BlogBundle\Entity\Likes $likes
+     * @return User
+     */
+    public function addLike(\Blogger\BlogBundle\Entity\Likes $likes) {
+        $this->likes[] = $likes;
+
+        return $this;
+    }
+
+    /**
+     * Remove likes
+     *
+     * @param \Blogger\BlogBundle\Entity\Likes $likes
+     */
+    public function removeLike(\Blogger\BlogBundle\Entity\Likes $likes) {
+        $this->likes->removeElement($likes);
+    }
+
+    /**
+     * Get likes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLikes() {
+        return $this->likes;
+    }
+
+    /**
+     * Set image
+     *
+     * @param string $image
+     * @return User
+     */
+    public function setImage($image) {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return string 
+     */
+    public function getImage() {
+        return $this->image;
+    }
+
+    public function setFile(UploadedFile $file) {
+        $this->file = $file;
+    }
+
+    public function getFile() {
+        return $this->file;
+    }
+
+    public static function getAbsolutePath() {
+        return null === $this->image ? null : $this->getUploadRootDir() . '/' . $this->image;
+    }
+
+    public static function getWebPath() {
+        return null === $this->image ? null : $this->getUploadDir() . '/' . $this->image;
+    }
+
+    public static function getUploadDir() {
+        return "upload/user_images";
+    }
+
+    public static function getUploadRootDir() {
+        return __DIR__ . "/../../../../web/" . $this->getUploadDir();
     }
 
 }

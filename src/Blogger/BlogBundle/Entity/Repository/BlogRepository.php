@@ -37,13 +37,17 @@ class BlogRepository extends EntityRepository {
 
             foreach ($tags as $key => $value) {
                 $tags[$key] = trim($value);
+//                echo "<br>".$value;
             }
-
-
-            if (array_search($tag, $tags)) {
+            if (in_array($tag, $tags, TRUE)) {
                 $ids[] = $blog->getId();
             }
+//            if (array_search(trim($tag), $tags)) {
+//                $ids[] = $blog->getId();
+//            }
         }
+//        print_r($ids);
+//        exit();
 
         if (empty($ids)) {
             return null;
@@ -53,6 +57,37 @@ class BlogRepository extends EntityRepository {
 
         return $filtedBlogs;
     }
+    
+    public function getTagFilterQuery($tag) {
+        $blogs = $this->createQueryBuilder("a")
+                ->select()
+                ->getQuery()
+                ->getResult();
+
+        $ids = array();
+
+        foreach ($blogs as $blog) {
+            $tags = explode(",", $blog->getTags());
+
+            foreach ($tags as $key => $value) {
+                $tags[$key] = trim($value);
+            }
+
+            if (in_array($tag, $tags, TRUE)) {
+                $ids[] = $blog->getId();
+            }
+        }
+
+        if (empty($ids)) {
+            return null;
+        }
+        $qb = $this->createQueryBuilder('c');
+        $filtedBlogsQuery = $qb->select()->where($qb->expr()->in('c.id', $ids))->getQuery();
+
+        return $filtedBlogsQuery;
+    }
+    
+    
 
     public function getTags() {
         $blogTags = $this->createQueryBuilder('b')
@@ -66,7 +101,7 @@ class BlogRepository extends EntityRepository {
         }
 
         foreach ($tags as &$tag) {
-            $tag = trim($tag);
+            $tag = strtolower(trim($tag));
         }
 
         return $tags;
@@ -101,5 +136,7 @@ class BlogRepository extends EntityRepository {
         $qur = $qb->select()->where($qb->expr()->like('b.' . $filedName, ':keyword'))->setParameter('keyword', '%' . $keyword . '%')->getQuery();
         return $qur->getResult();
     }
+
+  
 
 }

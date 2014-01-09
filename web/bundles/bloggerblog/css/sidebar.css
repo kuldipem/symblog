@@ -9,6 +9,7 @@
 .sidebar .comment { margin-bottom: 10px; padding-bottom: 10px; }
 .sidebar .tags { font-weight: bold; }
 .sidebar .tags span { color: #000; font-size: 12px; }
+
 .sidebar .tags .weight-1 { font-size: 12px; }
 .sidebar .tags .weight-2 { font-size: 15px; }
 .sidebar .tags .weight-3 { font-size: 18px; }

@@ -9,8 +9,13 @@
         <h2>{{ blog.title }}</h2>
     </header>
     <img class="lazy" src="{{ asset("images/ajax-loader.gif") }}"  data-src="{{ asset(['images/', blog.image]|join) }}" alt="{{ blog.title }} image not found" class="large" />
+
+    {% if blog.user|is_me(app.user,true) %}
+    <a href="{{ path("BloggerBlogBundle_blog_edit_my_blog",{ slug: blog.slug }) }}"><button>Edit</button></a>
+    <a onclick="return confirm('Do you want to delete ?');" href="{{ path("BloggerBlogBundle_blog_delete_my_blog",{ id: blog.id }) }}"><button>Delete</button></a>
+    {% endif %}
     <div>
-        <p>{{ blog.blog }}</p>
+        <p>{{ blog.blog|raw }}</p>
     </div>
 </article>
 <section class="comments" id="comments">
@@ -18,23 +23,28 @@
         <h3>Comments</h3>
             {% include 'BloggerBlogBundle:Comment:index.html.twig' with { 'comments': comments } %}
     </section>
-    <h3>Add Comment <img class="comment-loader" src="{{ asset("images/ajax-loader.gif") }}" />  </h3>
-       {{ render(controller( 'BloggerBlogBundle:Comment:new', { 'blog_id': blog.id } )) }}
+    <h3>Add Comment</h3>
+{% if app.user is not null %}
+        {% render url('BloggerBlogBundle_comment_new', { 'blog_id': blog.id }) %}
+{% else %}
+     {% include 'BloggerUserBundle:User:pleaseLogin.html.twig' %}
+{% endif %}
 </section>
 
+{% endblock %}
+{% block javascripts %}
+
+{{ parent() }}
 <script>
     $(document).ready(function() {
-        var ajax_comment = "";
-        $("ajax_send_comment").on("click", function() {
-            ajax_comment = $.ajax({
-                url: "{{ path('BloggerBlogBundle_comment_create', { 'blog_id' : blog.id } ) }}",
-                data: {user: $("#comment_form input[type='text']").val(), comment: $("#comment_form textarea").val()},
-                dataType: "json",
-                success: function(data,status,xhr){
-                    
-                }
-            });
+        $(".lazy").lazy({
+            threshold: 0,
+            effect: "fadeIn",
+            effectTime: 1500
         });
+
     });
+
+
 </script>
 {% endblock %}

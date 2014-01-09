@@ -9,11 +9,10 @@ blogger_user:
 blogger_blog:
     resource: "@BloggerBlogBundle/Resources/config/routing.yml"
     prefix:   /
-login:
-    pattern: /login
-    defaults: { _controller: BloggerUserBundle:User:login }
-login_check:
-    pattern: /login_check
-logout:
-    pattern: /logout
+
+blogger_blog_new:
+    resource: "@BloggerBlogBundle/Resources/config/routing_new.yml"
+    prefix:   /
+
+
     

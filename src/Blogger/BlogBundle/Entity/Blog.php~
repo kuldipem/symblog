@@ -13,24 +13,17 @@
 
 namespace Blogger\BlogBundle\Entity;
 
-use Blogger\BlogBundle\Entity\Repository\BlogRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 /**
  * @ORM\Entity(repositoryClass="Blogger\BlogBundle\Entity\Repository\BlogRepository")
  * @ORM\Table(name="blog")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\HasLifecycleCallbacks()
  */
 class Blog {
-
-    public function __construct() {
-        $this->setCreated(new DateTime());
-        $this->setUpdated(new DateTime());
-    }
-
-    public function __toString() {
-        return $this->getTitle();
-    }
 
     /**
      * @ORM\PreUpdate
@@ -52,17 +45,12 @@ class Blog {
     protected $title;
 
     /**
-     * @ORM\Column(type="string", length=100)
-     */
-    protected $author;
-
-    /**
      * @ORM\Column(type="text")
      */
     protected $blog;
 
     /**
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=255)
      */
     protected $image;
 
@@ -89,7 +77,45 @@ class Blog {
     /**
      * @ORM\OneToMany(targetEntity="Comment", mappedBy="blog")
      */
-    protected $comments = array();
+    protected $comments;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Likes", mappedBy="blog")
+     */
+    protected $likes;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Blogger\UserBundle\Entity\User", inversedBy="blog" )
+     * @ORM\JoinColumn(referencedColumnName="id")
+     */
+    protected $user;
+
+
+
+
+    /*
+     * @Assert\File(maxSize="6000000")
+     */
+    private $file;
+
+    public function __construct() {
+        $this->setCreated(new DateTime());
+        $this->setUpdated(new DateTime());
+        $this->comments = new ArrayCollection();
+        $this->likes = new ArrayCollection();
+    }
+
+    public function __toString() {
+        return $this->getTitle();
+    }
+
+    public function setFile(UploadedFile $file) {
+        $this->file = $file;
+    }
+
+    public function getFile() {
+        return $this->file;
+    }
 
     public function addComment(Comment $comment) {
         $this->comments[] = $comment;
@@ -129,26 +155,7 @@ class Blog {
         return $this->title;
     }
 
-    /**
-     * Set author
-     *
-     * @param string $author
-     * @return Blog
-     */
-    public function setAuthor($author) {
-        $this->author = $author;
-
-        return $this;
-    }
-
-    /**
-     * Get author
-     *
-     * @return string 
-     */
-    public function getAuthor() {
-        return $this->author;
-    }
+   
 
     /**
      * Set blog
@@ -311,4 +318,73 @@ class Blog {
         return $text;
     }
 
+    public static function getAbsolutePath() {
+        return null === $this->image ? null : $this->getUploadRootDir() . '/' . $this->image;
+    }
+
+    public static function getWebPath() {
+        return null === $this->image ? null : $this->getUploadDir() . '/' . $this->image;
+    }
+
+    public static function getUploadDir() {
+        return "images";
+    }
+
+    public static function getUploadRootDir() {
+        return __DIR__ . "/../../../../web/" . $this->getUploadDir();
+    }
+
+    /**
+     * Add likes
+     *
+     * @param Likes $likes
+     * @return Blog
+     */
+    public function addLike(Likes $likes) {
+        $this->likes[] = $likes;
+
+        return $this;
+    }
+
+    /**
+     * Remove likes
+     *
+     * @param Likes $likes
+     */
+    public function removeLike(Likes $likes) {
+        $this->likes->removeElement($likes);
+    }
+
+    /**
+     * Get likes
+     *
+     * @return Collection 
+     */
+    public function getLikes() {
+        return $this->likes;
+    }
+
+
+    /**
+     * Set user
+     *
+     * @param \Blogger\UserBundle\Entity\User $user
+     * @return Blog
+     */
+    public function setUser(\Blogger\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+    
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Blogger\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
 }

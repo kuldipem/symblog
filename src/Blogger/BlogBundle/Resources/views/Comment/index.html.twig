@@ -2,7 +2,16 @@
 {% for comment in comments %}
 <article class="comment {{ cycle(['odd', 'even'], loop.index0) }}" id="comment-{{ comment.id }}">
     <header>
-        <p><span class="highlight">{{ comment.user }}</span> commented <time datetime="{{ comment.created|date('c') }}">{{ comment.created|created_ago }}</time></p>
+        <p>
+            
+            <span class="highlight">{{ comment.user|is_me(app.user) }}</span> commented <time datetime="{{ comment.created|date('c') }}">{{ comment.created|created_ago }}</time>
+
+            {% if comment.user|is_me(app.user,true) %}
+            <span class="right">
+                <a onclick="return confirm('Do you want to delete comment ?');" href="{{ path("BloggerBlogBundle_comment_delete",{ "blog_id": comment.blog.id,"comment_id": comment.id }) }}" ><button>Delete</button></a>
+            </span>
+            {% endif %}
+        </p>
     </header>
     <p>{{ comment.comment }}</p>
 </article>

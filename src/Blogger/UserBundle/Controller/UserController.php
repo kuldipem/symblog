@@ -2,7 +2,10 @@
 
 namespace Blogger\UserBundle\Controller;
 
+use Blogger\UserBundle\Entity\Repository\UserRepository;
 use Blogger\UserBundle\Entity\User;
+use Blogger\UserBundle\Form\Model\ChangePassword;
+use Blogger\UserBundle\Form\Model\ChangePasswordType;
 use Blogger\UserBundle\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\SecurityContext;
@@ -10,7 +13,6 @@ use Symfony\Component\Security\Core\SecurityContext;
 class UserController extends Controller {
 
     public function indexAction() {
-
         $em = $this->getDoctrine()->getManager();
         $blogs = $em->getRepository("BloggerBlogBundle:Blog")->getLatestBlogs();
         return $this->render('BloggerBlogBundle:Page:index.html.twig', array("blogs" => $blogs));
@@ -18,15 +20,13 @@ class UserController extends Controller {
 
     public function loginAction() {
 
-        if ($this->getUser()) {
+        $security_context = $this->container->get('security.context');
 
-            $em = $this->getDoctrine()->getManager();
-            $blogs = $em->getRepository("BloggerBlogBundle:Blog")->getLatestBlogs();
-
+        if (UserRepository::isAuthorized($security_context)) {
             return $this->redirect($this->generateUrl("BloggerBlogBundle_homepage"));
         } else {
             $request = $this->getRequest();
-            $session = $request->getSession();
+            $session = $this->get('session');
             // get the login error if there is one
             if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
                 $error = $request->attributes->get(
@@ -48,46 +48,73 @@ class UserController extends Controller {
     }
 
     public function registerAction() {
-        $request = $this->getRequest();
+
+        $security_context = $this->container->get('security.context');
+
         $register = new User();
         $form = $this->createForm(new UserType(), $register);
+        $form->add('password', 'password');
+        $form->add('sex', 'choice', array("choices" => array("MALE" => "Male", "FEMALE" => "Female")));
+        $form->add('birthdate', 'date', array("years" => range(date('Y') - 90, date('Y') - 18)));
+        $form->remove('salt');
+        $form->remove('roles');
+        $form->remove('isActive');
 
         $factory = $this->get('security.encoder_factory'); // get use encoder factory
         $encoder = $factory->getEncoder($register);
 
         $form->add("SignUp", "submit");
 
-        $form->handleRequest($request);
+        $form->handleRequest($this->getRequest());
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            
-            
-            /* TO SALT PASSWORD WITH ENCODER FACTORY*/
+
+            /* TO SALT PASSWORD WITH ENCODER FACTORY */
             $pasword = $encoder->encodePassword($register->getPassword(), $register->getSalt());
             $register->setPassword($pasword);
-
-
             $em->persist($register);
             $em->flush();
+            $this->get('session')->getFlashBag()->add('loginSuccess', 'You have register successfully !!! ');
             return $this->redirect($this->generateUrl("login"));
         }
 
         return $this->render('BloggerUserBundle:User:register.html.twig', array('register' => $form->createView()));
     }
 
-//    public function handleRegisterAction() {
-//        $request = $this->getRequest();
-//        $register = new User();
-//        $form = $this->createForm(new UserType(), $register);
-//
-//        $form->handleRequest($request);
-//        if ($form->isValid()) {
-//            $em = $this->getDoctrine()->getManager();
-//            $em->persist($register);
-//            $em->flush();
-//            return $this->redirect($this->generateUrl("login"));
-//        }
-//
-//        return $this->render('BloggerUserBundle:User:register.html.twig', array('register' => $form->createView()));
-//    }
+    public function chanegPasswordAction() {
+
+        $request = $this->getRequest();
+        $chgPwd= new ChangePassword();
+        $form = $this->createForm(new ChangePasswordType(), $chgPwd);
+        $form->add('Change Password','submit');
+        
+        $user=  $this->getUser();
+        
+        $form->handleRequest($request);
+
+        $factory = $this->get('security.encoder_factory'); // get use encoder factory
+        $encoder = $factory->getEncoder($user);
+
+        
+        if ($form->isValid()) {
+
+            $em=$this->getDoctrine()->getManager();
+            
+            $pasword = $encoder->encodePassword($chgPwd->getNewPassword(), $user->getSalt());
+            $user->setPassword($pasword);
+            $em->persist($user);
+            $em->flush();
+            $this->get("session")->getFlashBag()->add("loginSuccess","Your Password is changed , SingIn again !!");
+            return $this->redirect($this->generateUrl("logout"));
+            
+        }
+
+        return $this->render("BloggerUserBundle:User:changePassword.html.twig",array("form"=>$form->createView()));
+    }
+
+    public function logoutAction() {
+//        $this->get("request")->getSession()->invalidate();
+        $this->get("security.context")->setToken(null);
+    }
+
 }

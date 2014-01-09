@@ -13,9 +13,10 @@
 
 namespace Blogger\BlogBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 /**
  * @ORM\Entity(repositoryClass="Blogger\BlogBundle\Entity\Repository\CommentRepository")
@@ -31,11 +32,7 @@ class Comment {
      */
     protected $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    protected $user;
-
+  
     /**
      * @ORM\Column(type="text")
      */
@@ -48,7 +45,7 @@ class Comment {
 
     /**
      * @ORM\ManyToOne(targetEntity="Blog", inversedBy="comments")
-     * @ORM\JoinColumn(name="blog_id", referencedColumnName="id")
+     * @ORM\JoinColumn(referencedColumnName="id")
      */
     protected $blog;
 
@@ -61,58 +58,41 @@ class Comment {
      * @ORM\Column(type="datetime")
      */
     protected $updated;
+    
+    /**
+     * @var $commentator instance of User
+     * @ORM\ManyToOne(targetEntity="Blogger\UserBundle\Entity\User", inversedBy="comments" )
+     * @ORM\JoinColumn(referencedColumnName="id")
+     */
+    protected $user;
 
     public function __construct() {
-        $this->setCreated(new \DateTime());
-        $this->setUpdated(new \DateTime());
+        $this->setCreated(new DateTime());
+        $this->setUpdated(new DateTime());
 
         $this->setApproved(true);
     }
 
-    public static function loadValidatorMetadata(ClassMetadata $metadata) {
-        $metadata->addPropertyConstraint('user', new NotBlank(array(
-            'message' => 'You must enter your name'
-        )));
-        $metadata->addPropertyConstraint('comment', new NotBlank(array(
-            'message' => 'You must enter a comment'
-        )));
-    }
-
+   
     /**
-     * @ORM\preUpdate
+     * @ORM\PreUpdate
      */
     public function setUpdatedValue() {
-        $this->setUpdated(new \DateTime());
+        $this->setUpdated(new DateTime());
     }
+
+   
+
+  
 
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
-    }
-
-    /**
-     * Set user
-     *
-     * @param string $user
-     * @return Comment
-     */
-    public function setUser($user) {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return string 
-     */
-    public function getUser() {
-        return $this->user;
     }
 
     /**
@@ -121,9 +101,10 @@ class Comment {
      * @param string $comment
      * @return Comment
      */
-    public function setComment($comment) {
+    public function setComment($comment)
+    {
         $this->comment = $comment;
-
+    
         return $this;
     }
 
@@ -132,7 +113,8 @@ class Comment {
      *
      * @return string 
      */
-    public function getComment() {
+    public function getComment()
+    {
         return $this->comment;
     }
 
@@ -142,9 +124,10 @@ class Comment {
      * @param boolean $approved
      * @return Comment
      */
-    public function setApproved($approved) {
+    public function setApproved($approved)
+    {
         $this->approved = $approved;
-
+    
         return $this;
     }
 
@@ -153,7 +136,8 @@ class Comment {
      *
      * @return boolean 
      */
-    public function getApproved() {
+    public function getApproved()
+    {
         return $this->approved;
     }
 
@@ -163,9 +147,10 @@ class Comment {
      * @param \DateTime $created
      * @return Comment
      */
-    public function setCreated($created) {
+    public function setCreated($created)
+    {
         $this->created = $created;
-
+    
         return $this;
     }
 
@@ -174,7 +159,8 @@ class Comment {
      *
      * @return \DateTime 
      */
-    public function getCreated() {
+    public function getCreated()
+    {
         return $this->created;
     }
 
@@ -184,9 +170,10 @@ class Comment {
      * @param \DateTime $updated
      * @return Comment
      */
-    public function setUpdated($updated) {
+    public function setUpdated($updated)
+    {
         $this->updated = $updated;
-
+    
         return $this;
     }
 
@@ -195,7 +182,8 @@ class Comment {
      *
      * @return \DateTime 
      */
-    public function getUpdated() {
+    public function getUpdated()
+    {
         return $this->updated;
     }
 
@@ -205,9 +193,10 @@ class Comment {
      * @param \Blogger\BlogBundle\Entity\Blog $blog
      * @return Comment
      */
-    public function setBlog(\Blogger\BlogBundle\Entity\Blog $blog = null) {
+    public function setBlog(\Blogger\BlogBundle\Entity\Blog $blog = null)
+    {
         $this->blog = $blog;
-
+    
         return $this;
     }
 
@@ -216,8 +205,31 @@ class Comment {
      *
      * @return \Blogger\BlogBundle\Entity\Blog 
      */
-    public function getBlog() {
+    public function getBlog()
+    {
         return $this->blog;
     }
 
+    /**
+     * Set user
+     *
+     * @param \Blogger\UserBundle\Entity\User $user
+     * @return Comment
+     */
+    public function setUser(\Blogger\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+    
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Blogger\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
 }

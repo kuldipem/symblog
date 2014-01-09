@@ -1,1 +1,9 @@
-{{ form(register,{'attr': {'novalidate': 'novalidate'}} ) }}
+{% extends 'BloggerBlogBundle::layout.html.twig' %}
+{% block body %}
+    {% if notice!=null %}
+<div class="blogger-notice">{{ notice }}</div>
+    {% endif %}
+{{ form(profile,{'attr': {'class':'blogger', 'name':'profile' }} ) }}
+<a href="{{ path("BloggerUserBundle_change_password") }}">Change Password</a>
+{% endblock %}
+

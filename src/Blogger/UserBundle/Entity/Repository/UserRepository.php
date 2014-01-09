@@ -23,14 +23,14 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
                 ->setParameter("username", $username)
                 ->setParameter("email", $username)
                 ->getQuery();
-        
+
         try {
             $user = $q->getSingleResult();
         } catch (NoResultException $exc) {
             $message = sprintf('Unable to find User with UserName "%s".', $username);
             throw new UsernameNotFoundException($message, 0, $exc);
         }
-        
+
         return $user;
     }
 
@@ -46,6 +46,28 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
 
     public function supportsClass($class) {
         return $this->getEntityName() === $class || is_subclass_of($class, $this->getEntityName());
+    }
+
+    
+    public static function isAuthorized($security_context) {
+        if ($security_context->isGranted('IS_AUTHENTICATED_FULLY') || $security_context->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            return true;
+        }
+        return false;
+    }
+
+    public static function isFullyAuthorized($security_context) {
+        if ($security_context->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return true;
+        }
+        return false;
+    }
+
+    public static function isRememberedAutorized($security_context) {
+        if ($security_context->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            return true;
+        }
+        return false;
     }
 
 }

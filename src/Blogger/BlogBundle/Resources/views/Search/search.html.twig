@@ -15,7 +15,7 @@
 
     <footer class="meta">
         <p>Comments: <a href="{{ path('BloggerBlogBundle_blog_show', { 'id': result.id, 'slug': result.slug }) }}#comments">{{ result.comments|length }}</a></p>
-        <p>Posted by <span class="highlight">{{ result.author }}</span> at {{ result.created|date('h:iA') }}</p>
+        <p>Posted by <span class="highlight">{{ result.user }}</span> at {{ result.created|date('h:iA') }}</p>
         <p>Tags: <span class="highlight">{{ result.tags }}</span></p>
     </footer>
 </article>
@@ -23,5 +23,19 @@
 <p>There are no blog entries for tag <i>{{ app.request.get('tag') }}</i></p>
     {% endfor %}
 {% endblock %}
-{% block  javascript %}
+
+{% block javascripts %}
+
+{{ parent() }}
+    <script>
+        $(document).ready(function() {
+            $(".lazy").lazy({
+                threshold: 0,
+                effect: "fadeIn",
+                effectTime: 1500
+            });
+
+        });
+
+    </script>
 {% endblock %}

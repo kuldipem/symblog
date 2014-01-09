@@ -11,7 +11,7 @@
         <link href='http://fonts.googleapis.com/css?family=La+Belle+Aurore' rel='stylesheet' type='text/css'>
 {% stylesheets '@BloggerBlogBundle/Resources/public/css/*' 
     output='css/blogger.css'
-    filter='yui_css' %}
+    filter='yui_css' debug=false %}
         <link href="{{ asset_url }}" rel="stylesheet" media="screen" />
 {% endstylesheets %}
 
@@ -50,19 +50,11 @@
 
         {% block javascripts %}
 
-    {% javascripts '@BloggerBlogBundle/Resources/public/js/*'  %}
+    {% javascripts '@BloggerBlogBundle/Resources/public/js/*' filter="yui_js"  debug=false %}
         <script src="{{ asset_url }}"></script>
-        {% endjavascripts %}
+    {% endjavascripts %}
 
-        <script>
-            $(document).ready(function() {
-                $(".lazy").lazy({
-                    threshold: 0,
-                    effect: "fadeIn",
-                    effectTime: 1500
-                });
-            });
-        </script>
+     
 
 {% endblock %}
     </body>

@@ -2,15 +2,25 @@
 <nav>
     <ul class="navigation">
         <li><a href="{{ path("BloggerBlogBundle_homepage") }}">Home</a></li>
+        <li><a href="{{ path("advance_homepage") }}">Advance Home</a></li>
+                 {% if app.security|is_authorized %}
+        <li><a href="{{ path("BloggerBlogBundle_blog_my_blog") }}" >My Blogs</a></li>
+        <li><a href="{{ path("BloggerUserBundle_profile") }}" >My Profile</a></li>
+        <li><a href="{{ path("logout") }}" >Logout</a></li>
+        <li>
+            <a href="{{ path("BloggerUserBundle_profile_image") }}" >
+		{% if app.user.image is not empty  %}
+                <img class="profile-img small" src="/upload/user_images{{ asset(app.user.image) }}" />
+		{% else %}
+		<img class="profile-img small" src="/images/def_img_pic.jpeg" />
+		{% endif %}
+            </a>
+        </li>
+                {% else %}
         <li><a href="{{ path("BloggerBlogBundle_about") }}">About</a></li>
         <li><a href="{{ path("BloggerBlogBundle_contact") }}">Contact</a></li>
-                {% if is_granted('ROLE_USER') %}
-                        <li><a href="#" >My Blogs</a></li>
-                        <li><a href="#" >My Profile</a></li>
-                        <li><a href="{{ path("logout") }}" >Logout</a></li>
-                {% else %}
-                        <li><a href="{{ path("register") }}" >Register</a></li>
-                        <li><a href="{{ path("login") }}" >Login</a></li>
+        <li><a href="{{ path("register") }}" >Register</a></li>
+        <li><a href="{{ path("login") }}" >Login</a></li>
                 {% endif %}
     </ul>
 </nav>
