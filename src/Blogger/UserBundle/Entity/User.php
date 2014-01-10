@@ -10,6 +10,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\True;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -130,14 +131,11 @@ class User implements AdvancedUserInterface, Serializable, EquatableInterface {
      * @ORM\OneToMany(targetEntity="Blogger\BlogBundle\Entity\Likes", mappedBy="user")
      */
     protected $likes;
-    
+
     /**
      * @ORM\OneToOne(targetEntity="UserSecurity", mappedBy="user" )
      */
     protected $security;
-    
-
-
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -562,17 +560,15 @@ class User implements AdvancedUserInterface, Serializable, EquatableInterface {
         return __DIR__ . "/../../../../web/" . $this->getUploadDir();
     }
 
-
     /**
      * Set security
      *
      * @param \Blogger\UserBundle\Entity\UserSecurity $security
      * @return User
      */
-    public function setSecurity(\Blogger\UserBundle\Entity\UserSecurity $security = null)
-    {
+    public function setSecurity(\Blogger\UserBundle\Entity\UserSecurity $security = null) {
         $this->security = $security;
-    
+
         return $this;
     }
 
@@ -581,8 +577,10 @@ class User implements AdvancedUserInterface, Serializable, EquatableInterface {
      *
      * @return \Blogger\UserBundle\Entity\UserSecurity 
      */
-    public function getSecurity()
-    {
+    public function getSecurity() {
         return $this->security;
     }
+
+ 
+
 }
