@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @ORM\Entity(repositoryClass="Blogger\UserBundle\Entity\Repository\UserRepository")
  * @UniqueEntity(fields="email", message="Email is already taken.")
  * @UniqueEntity(fields="username", message="Username is already used.")
+ * @ORM\HasLifecycleCallbacks()
  */
 class User implements AdvancedUserInterface, Serializable, EquatableInterface {
 
@@ -132,6 +133,18 @@ class User implements AdvancedUserInterface, Serializable, EquatableInterface {
      */
     protected $likes;
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="Blogger\FriendBundle\Entity\FriendRequest", mappedBy="requestBy")
+     */
+    protected $getFriendRequests;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Blogger\FriendBundle\Entity\FriendRequest", mappedBy="requestTo")
+     */
+    protected $sendFriendRequests;
+    
+
     /**
      * @ORM\OneToOne(targetEntity="UserSecurity", mappedBy="user" )
      */
@@ -142,6 +155,15 @@ class User implements AdvancedUserInterface, Serializable, EquatableInterface {
      */
     protected $image;
 
+    /**
+     * @ORM\Column(type="date")
+     */
+    protected $created;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    protected $updated;
 
     /*
      * @Assert\File(maxSize="6000000")
@@ -156,6 +178,15 @@ class User implements AdvancedUserInterface, Serializable, EquatableInterface {
         $this->isActive = true;
         $this->salt = md5(uniqid(null, true));
         $this->roles = array('ROLE_USER');
+        $this->setCreated(new DateTime());
+        $this->setUpdated(new DateTime());
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function setUpdatedValue() {
+        $this->setUpdated(new DateTime());
     }
 
     /**
@@ -581,6 +612,113 @@ class User implements AdvancedUserInterface, Serializable, EquatableInterface {
         return $this->security;
     }
 
- 
+    /**
+     * Set created
+     *
+     * @param \DateTime $created
+     * @return User
+     */
+    public function setCreated($created) {
+        $this->created = $created;
 
+        return $this;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \DateTime 
+     */
+    public function getCreated() {
+        return $this->created;
+    }
+
+    /**
+     * Set updated
+     *
+     * @param \DateTime $updated
+     * @return User
+     */
+    public function setUpdated($updated) {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * Get updated
+     *
+     * @return \DateTime 
+     */
+    public function getUpdated() {
+        return $this->updated;
+    }
+
+
+
+    /**
+     * Add getFriendRequests
+     *
+     * @param \Blogger\FriendBundle\Entity\FriendRequest $getFriendRequests
+     * @return User
+     */
+    public function addGetFriendRequest(\Blogger\FriendBundle\Entity\FriendRequest $getFriendRequests)
+    {
+        $this->getFriendRequests[] = $getFriendRequests;
+    
+        return $this;
+    }
+
+    /**
+     * Remove getFriendRequests
+     *
+     * @param \Blogger\FriendBundle\Entity\FriendRequest $getFriendRequests
+     */
+    public function removeGetFriendRequest(\Blogger\FriendBundle\Entity\FriendRequest $getFriendRequests)
+    {
+        $this->getFriendRequests->removeElement($getFriendRequests);
+    }
+
+    /**
+     * Get getFriendRequests
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getGetFriendRequests()
+    {
+        return $this->getFriendRequests;
+    }
+
+    /**
+     * Add sendFriendRequests
+     *
+     * @param \Blogger\FriendBundle\Entity\FriendRequest $sendFriendRequests
+     * @return User
+     */
+    public function addSendFriendRequest(\Blogger\FriendBundle\Entity\FriendRequest $sendFriendRequests)
+    {
+        $this->sendFriendRequests[] = $sendFriendRequests;
+    
+        return $this;
+    }
+
+    /**
+     * Remove sendFriendRequests
+     *
+     * @param \Blogger\FriendBundle\Entity\FriendRequest $sendFriendRequests
+     */
+    public function removeSendFriendRequest(\Blogger\FriendBundle\Entity\FriendRequest $sendFriendRequests)
+    {
+        $this->sendFriendRequests->removeElement($sendFriendRequests);
+    }
+
+    /**
+     * Get sendFriendRequests
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSendFriendRequests()
+    {
+        return $this->sendFriendRequests;
+    }
 }

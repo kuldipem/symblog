@@ -11,6 +11,11 @@
         {% endfor %}
 </p>
 </section>
+
+{% block friendSuggestionBar %}
+    {{ render_hinclude(controller("BloggerFriendBundle:Friend:friendSuggestionBar")) }}
+{% endblock %}
+
 <section class="section">
     <header>
         <h3>Latest Comments</h3>

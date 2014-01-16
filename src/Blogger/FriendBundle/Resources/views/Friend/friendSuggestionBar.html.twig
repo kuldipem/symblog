@@ -1,0 +1,30 @@
+{% block friendSuggestionBar %}
+<section class="section">
+    <header>
+        <h3>Get Inspired By</h3>
+    </header>
+    <ul class="inpierd-by-user-list">
+        {% for user in users %}
+        <li>
+            <div style="display: block;">
+                <div style="display: inline-block;">
+                    {% if user.image is not empty  %}
+                    <img class="profile-img square" src="/upload/user_images{{ asset(user.image) }}" />
+                    {% else %}
+                    <img class="profile-img square" src="/images/def_img_pic.jpeg" />
+                    {% endif %}
+                </div>
+                <div class="user-detail">
+                    <span><a href="#" >{{ user.firstname }} {{ user.lastname }}</a></span>
+                    <span class="muted"> Post  {{ user.blogs|length }}  ,Comments {{ user.comments|length }} ,Likes {{ user.likes|length }}</span>
+                    <span class="muted"> Join  {{ user.created|created_ago }} </span>
+                    <span class="add-inspirer-link"><a onclick="sendFriendRequest(event,{{ app.user.id }},{{ user.id }});"  href="#">Add Inspirer</a></span>
+                </div>
+            </div>
+        </li>
+        {% else %}
+        <li>There are no users</li>
+        {% endfor %}
+    </ul>
+</section>
+{% endblock %}

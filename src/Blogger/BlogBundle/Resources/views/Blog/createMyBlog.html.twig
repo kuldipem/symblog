@@ -1,0 +1,41 @@
+{% extends 'BloggerBlogBundle::layout.html.twig' %}
+
+        {% block title %}
+post blog
+        {% endblock%}
+
+        {% block stylesheets %}
+            {{ parent()}}
+          {#  {% stylesheets '@BloggerBlogBundle/Resources/public/jquery-textext/css/*' 
+                output='css/blogger.css'
+                filter='?yui_css' %}
+<link href="{{ asset_url }}" rel="stylesheet" media="screen" />
+            {% endstylesheets %}#}
+         {% endblock %}
+
+{% block body %}
+    {{ form(blog,{'attr': {'novalidate': 'novalidate', 'class':'blogger'}} ) }}
+<div class="blogger-notice info">
+    * Multiple tags can be seprated with ',' .
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {#{% javascripts '@BloggerBlogBundle/Resources/public/jquery-textext/js/*' filter="?yui_js" %}
+<script src="{{ asset_url }}"></script>
+    {% endjavascripts %}#}
+<script>
+  {#  $('#blogger_blogbundle_blog_tags')
+            .textext({
+                plugins: 'tags prompt suggestions',
+                ajax: {
+                    url: '{{ path("BloggerBlogBundle_tags_get") }}',
+                    dataType: 'json',
+                    cacheResults: true
+                }
+            })
+            ;#}
+</script>
+    {{ tinymce_init() }}
+{% endblock %}

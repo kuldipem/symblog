@@ -1,0 +1,14 @@
+advance_homepage:
+    pattern:  /advancehome
+    defaults: { _controller: BloggerBlogBundle:Page:advanceHome }
+    requirements:
+        _method:  GET
+        
+blog_show:
+    pattern:  /{year}/{month}/{day}/{id}/{slug}
+    defaults: { _controller: BloggerBlogBundle:Blog:show }
+    requirements:
+        _method:  GET
+        id: \d+
+        year: \d+
+     

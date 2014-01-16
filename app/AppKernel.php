@@ -22,7 +22,8 @@ class AppKernel extends Kernel {
             new Blogger\UserBundle\BloggerUserBundle(),
             new Blogger\TaskBundle\BloggerTaskBundle(),
             new Stfalcon\Bundle\TinymceBundle\StfalconTinymceBundle(),
-            
+            new Blogger\FriendBundle\BloggerFriendBundle(),
+            new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

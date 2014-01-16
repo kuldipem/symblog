@@ -2,6 +2,7 @@
 
 namespace Blogger\UserBundle\Entity\Repository;
 
+use Blogger\UserBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -48,7 +49,6 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
         return $this->getEntityName() === $class || is_subclass_of($class, $this->getEntityName());
     }
 
-    
     public static function isAuthorized($security_context) {
         if ($security_context->isGranted('IS_AUTHENTICATED_FULLY') || $security_context->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return true;
@@ -68,6 +68,48 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
             return true;
         }
         return false;
+    }
+
+    /**
+     * @param Object  $user  UserObject
+     * @param integer $limit Maximum record 
+     * @todo Implement alredy exist friends query
+     */
+    public function getInpiredByUsers($user, $limit = 3) {
+        if ($user) {
+
+            /* GET  ARRAY OF SEND REQUEST USER'S ID ' */
+            $requestSendUsers = $user->getSendFriendRequests();
+            $requestSendUserIdArray = array();
+            foreach ($requestSendUsers as $rs) {
+                $requestSendUserIdArray[] = $rs->getRequestTo()->getId();
+            }
+
+            /* GET  ARRAY OF GET REQUEST USER'S ID ' */
+            $requestGetUsers = $user->getGetFriendRequests();
+            $requestGetUserIdArray = array();
+            foreach ($requestGetUsers as $rs) {
+                $requestGetUserIdArray[] = $rs->getRequestBy()->getId();
+            }
+
+            $qb = $this->createQueryBuilder('u');
+            
+         
+
+            if(!empty($requestGetUserIdArray)){
+                $qb->orWhere($qb->expr()->in("u.id",$requestGetUserIdArray));
+            }
+            
+            if(!empty($requestSendUserIdArray)){
+                $qb->orWhere($qb->expr()->in("u.id",$requestSendUserIdArray));
+            }
+            return  $qb->where('u.id!=:id')->setParameter("id", $user->getId())->setMaxResults($limit)->getQuery()->getResult();
+        
+            
+        } else {
+            
+            return NULL;
+        }
     }
 
 }

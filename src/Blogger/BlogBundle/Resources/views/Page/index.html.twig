@@ -14,47 +14,53 @@
     </nav>#}
 
     {% for blog in blogs %}
-    <article class="blog">
-        <div class="date"><time datetime="{{ blog.created|date('c') }}">{{ blog.created|date('l, F j, Y') }}</time></div>
-        <header>
-            <h2><a href="{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id, 'slug': blog.slug }) }}">{{ blog.title }}</a></h2>
-        </header>
+<article class="blog">
+    <div class="date"><time datetime="{{ blog.created|date('c') }}">{{ blog.created|date('l, F j, Y') }}</time></div>
+    <header>
+        <h2><a href="{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id, 'slug': blog.slug }) }}">{{ blog.title }}</a></h2>
+    </header>
 
-        <img class="lazy" src="{{ asset("images/ajax-loader.gif")  }}" data-src="{{ asset(['images/', blog.image]|join) }}" />
-        <div class="snippet">
-            <p>{{ blog.blog(500)|raw }}</p>
-            <p class="continue"><a href="{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id, 'slug': blog.slug }) }}">Continue reading...</a></p>
-        </div>
+    <img class="lazy" src="{{ asset("images/ajax-loader.gif")  }}" data-src="{{ asset(['images/', blog.image]|join) }}" />
+    <div class="snippet">
+        <p>{{ blog.blog(500)|raw }}</p>
+        <p class="continue"><a href="{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id, 'slug': blog.slug }) }}">Continue reading...</a></p>
+    </div>
 
-        <footer class="meta" data-blog-id="{{ blog.id }}" >
-            <p>Likes : <a data-likes-counter="{{ blog.id }}" href="#">{{ blog.likes|length }}</a></p>
-            <p>Comments: <a data-comments-counter="{{ blog.id }}" href="{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id, 'slug': blog.slug }) }}#comments">{{ blog.comments|length }}</a></p>
-            <p>Posted by <span class="highlight">{{ blog.user|is_me(app.user) }}</span> at {{ blog.created|date('h:iA') }}</p>
-            <p>Tags: <span class="highlight">{{ blog.tags }}</span></p>
-            <p>
+    <footer class="meta" data-blog-id="{{ blog.id }}" >
+        <p>Likes : <a data-likes-counter="{{ blog.id }}" href="#">{{ blog.likes|length }}</a></p>
+        <p>Comments: <a data-comments-counter="{{ blog.id }}" href="{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id, 'slug': blog.slug }) }}#comments">{{ blog.comments|length }}</a></p>
+        <p>Posted by <span class="highlight">{{ blog.user|is_me(app.user) }}</span> at {{ blog.created|date('h:iA') }}</p>
+        <p>Tags: <span class="highlight">{{ blog.tags }}</span></p>
+        <p>
                  {% include 'BloggerBlogBundle:Likes:index.html.twig' with { 'blog': blog } %}
-            </p>        
+        </p>        
 
-        </footer>
-    </article>
+    </footer>
+</article>
     {% else %}
-        <p>There are no blog entries for symblog</p>
+<p>There are no blog entries for symblog</p>
     {% endfor %}
 
-    <nav class="pagination footer">
-        <ul>
-            <li>{{ knp_pagination_render(blogs) }}</li>
-        </ul>
-    </nav>  
+<nav class="pagination footer">
+    <ul>
+        <li>{{ knp_pagination_render(blogs) }}</li>
+    </ul>
+</nav>  
 
 {% endblock %}
 {% block javascripts %}
 
 {{ parent() }}
+    
+    {% javascripts '@BloggerFriendBundle/Resources/public/js/*' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    
 <script>
     $(document).ready(function() {
         $(".lazy").lazy({
-            threshold: 0,
+            enableThrottle: true,
+            threshold: 500,
             effect: "fadeIn",
             effectTime: 1500
         });

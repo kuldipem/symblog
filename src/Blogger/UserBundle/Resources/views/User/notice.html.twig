@@ -1,0 +1,25 @@
+
+{% set FlashTypes={"ERROR": "error", "WARNING":"warning", "INFO": "info" , "SUCCESS": "success" }  %}
+
+{# is_not_#}
+{% if  isFlash is defined %}
+<div class="blogger-notice 
+                 {% if flashFor in FlashTypes|keys  %}
+                        {{ FlashTypes[flashFor] }}  
+                 {% endif %}
+     ">
+{# flashName is here message #}
+            {{ flashName }}
+</div>
+{% else %}
+    {% for flashMessage in app.session.flashbag.get(flashName) %}
+<div class="blogger-notice 
+                     {% if flashFor in FlashTypes|keys  %}
+                            {{ FlashTypes[flashFor] }}  
+                     {% endif %}
+     ">
+
+                {{ flashMessage }}
+</div>
+    {% endfor %}
+{% endif %}

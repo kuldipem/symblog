@@ -85,7 +85,7 @@ class Blog {
     protected $likes;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Blogger\UserBundle\Entity\User", inversedBy="blog" )
+     * @ORM\ManyToOne(targetEntity="Blogger\UserBundle\Entity\User", inversedBy="blogs" )
      * @ORM\JoinColumn(referencedColumnName="id")
      */
     protected $user;

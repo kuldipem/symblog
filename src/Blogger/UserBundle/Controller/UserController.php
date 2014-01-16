@@ -58,6 +58,7 @@ class UserController extends Controller {
         $form->add('birthdate', 'date', array("years" => range(date('Y') - 90, date('Y') - 18)));
         $form->remove('salt');
         $form->remove('roles');
+        $form->remove('image');
         $form->remove('isActive');
 
         $factory = $this->get('security.encoder_factory'); // get use encoder factory

@@ -93,14 +93,14 @@ form.blogger ul li { color: #ff0000; margin-bottom: 5px; }
     display: inline-block;
     font-size: 15px;
     padding: 2px 5px;
-     border: 1px solid #CCCCCC;
+    border: 1px solid #CCCCCC;
 }
 .pagination > span.current{
     border: 1px solid black;
     cursor: not-allowed;
 }
 .pagination > span.current:hover{
-   
+
     cursor: not-allowed;
 }
 .pagination > span:hover{
@@ -110,8 +110,50 @@ form.blogger ul li { color: #ff0000; margin-bottom: 5px; }
 
 .profile-img{ width: 190px;  padding: 5px; border: 1px solid #ccc; margin: 0 10px 10px 0; }
 .profile-img.small{ 
-     border: 0 solid #CCCCCC;
+    border: 0 solid #CCCCCC;
     height: 30px;
     margin: -15px;
     width: 58px;
+}
+.profile-img.square{
+    height:50px;
+    width: 50px;
+    margin: 0px;
+    padding: 2px;
+}
+.inpierd-by-user-list{
+    list-style: none;
+}
+.inpierd-by-user-list  .user-detail{
+    clear: both;
+    display: inline-block;
+    line-height: 14px;
+    margin-left: 10px;
+    padding: 0;
+    position: absolute;
+}
+.inpierd-by-user-list  .user-detail span{
+    display: block;
+}
+.user-detail a:hover{
+    text-decoration: underline !important;
+}
+.inpierd-by-user-list .username.muted{
+    font-size: 10px;
+    color: #CCCCCC;
+}
+.inpierd-by-user-list .user-detail .muted{
+    font-size: 10px;
+    line-height: 13px;
+    color: #CCCCCC;
+    transition: all ease-in-out 0.5s;
+}
+.inpierd-by-user-list .user-detail .muted:hover{
+    color: #666;
+    cursor: pointer;
+}
+.inpierd-by-user-list .user-detail .add-inspirer-link > a{
+    font-size: 10px;
+    line-height: 14px;
+    font-style: italic;   
 }

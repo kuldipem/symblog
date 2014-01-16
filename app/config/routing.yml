@@ -1,3 +1,11 @@
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
+blogger_friend:
+    resource: "@BloggerFriendBundle/Controller"
+    prefix:   /
+    type: annotation
+
 blogger_task:
     resource: "@BloggerTaskBundle/Resources/config/routing.yml"
     prefix:   /

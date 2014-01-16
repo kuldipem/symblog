@@ -28,7 +28,10 @@
         "phpunit/phpunit-selenium": ">=1.2",
         "phpunit/phpunit-story": "*",
         "stfalcon/tinymce-bundle": "dev-master",
-        "knplabs/knp-paginator-bundle": "2.3.3" 
+        "knplabs/knp-paginator-bundle": "2.3.3",
+        "sonata-project/admin-bundle": "dev-master",
+        "twbs/bootstrap": "v3.0.3",
+        "friendsofsymfony/jsrouting-bundle": "@stable"
     },
     "scripts": {
         "post-install-cmd": [

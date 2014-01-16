@@ -65,15 +65,17 @@ class BlogRepository extends EntityRepository {
                 ->getResult();
 
         $ids = array();
+        
+    
 
         foreach ($blogs as $blog) {
             $tags = explode(",", $blog->getTags());
 
             foreach ($tags as $key => $value) {
-                $tags[$key] = trim($value);
+                $tags[$key] = strtolower(trim($value));
             }
 
-            if (in_array($tag, $tags, TRUE)) {
+            if (in_array(strtolower($tag), $tags, TRUE)) {
                 $ids[] = $blog->getId();
             }
         }
@@ -81,6 +83,7 @@ class BlogRepository extends EntityRepository {
         if (empty($ids)) {
             return null;
         }
+     
         $qb = $this->createQueryBuilder('c');
         $filtedBlogsQuery = $qb->select()->where($qb->expr()->in('c.id', $ids))->getQuery();
 
@@ -105,6 +108,24 @@ class BlogRepository extends EntityRepository {
         }
 
         return $tags;
+    }
+    
+    public function getUniqueTags() {
+        $blogTags = $this->createQueryBuilder('b')
+                ->select('b.tags')
+                ->getQuery()
+                ->getResult();
+
+        $tags = array();
+        foreach ($blogTags as $blogTag) {
+            $tags = array_merge(explode(",", $blogTag['tags']), $tags);
+        }
+
+        foreach ($tags as &$tag) {
+            $tag = strtolower(trim($tag));
+        }
+
+        return array_unique($tags,SORT_STRING);
     }
 
     public function getTagWeights($tags) {

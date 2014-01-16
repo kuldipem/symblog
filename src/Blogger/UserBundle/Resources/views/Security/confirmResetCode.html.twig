@@ -1,0 +1,27 @@
+{% extends 'BloggerBlogBundle::layout.html.twig' %}
+{% block title %}
+Enter Resetcode
+{% endblock %}
+
+{% block body %}
+    {# TO CHECK DIFFRENT TYPES OF FLASH MESSAGES AND RENDER APPROPRIATE NOTICE #}
+    {% include 'BloggerUserBundle:User:notice.html.twig' with {'flashName': 'flashError', 'flashFor':'ERROR' } %}
+    {% include 'BloggerUserBundle:User:notice.html.twig' with {'flashName': 'flashWarning', 'flashFor':'WARNING' } %}
+    {% include 'BloggerUserBundle:User:notice.html.twig' with {'flashName': 'flashSuccess', 'flashFor':'SUCCESS' } %}
+
+<form class="blogger" action="" method="post" novalidate="novalidate" >
+    <div>
+        <div>
+             {{ form_errors(form) }}
+            <label for="username">Reset code :</label>
+            {{ form_errors(form.resetcode) }}
+            {{ form_widget(form.resetcode) }}
+            {{ form_rest(form)  }}
+        </div>
+        <div>
+            <button type="submit">confirm Resetcode</button>
+        </div>
+    </div>
+</form>
+<p> If you haven't a resetcode,  <a href="{{ path("BloggerUserBundle_init_reset_password") }}">click here</a></p>
+{% endblock %}

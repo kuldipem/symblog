@@ -1,0 +1,5 @@
+{% if not app.security|is_authorized %}
+<section >
+    <p> Login to comment, click here <a href="{{ path('login') }}" >Login</a></p>
+</section>
+{% endif %}
