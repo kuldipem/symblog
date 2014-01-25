@@ -93,21 +93,23 @@ class UserRepository extends EntityRepository implements UserProviderInterface {
             }
 
             $qb = $this->createQueryBuilder('u');
-            
-         
 
-            if(!empty($requestGetUserIdArray)){
-                $qb->orWhere($qb->expr()->in("u.id",$requestGetUserIdArray));
+            $qb->Where('u.id!=:id')->setParameter("id", $user->getId());
+
+            if (!empty($requestGetUserIdArray)) {
+                $qb->andWhere($qb->expr()->notIn("u.id", $requestGetUserIdArray));
             }
-            
-            if(!empty($requestSendUserIdArray)){
-                $qb->orWhere($qb->expr()->in("u.id",$requestSendUserIdArray));
+
+            if (!empty($requestSendUserIdArray)) {
+                $qb->andWhere($qb->expr()->notIn("u.id", $requestSendUserIdArray));
             }
-            return  $qb->where('u.id!=:id')->setParameter("id", $user->getId())->setMaxResults($limit)->getQuery()->getResult();
-        
+
+            $obj = $qb->setMaxResults(3)->getQuery()->getResult();
+
+            return $obj;
             
         } else {
-            
+
             return NULL;
         }
     }

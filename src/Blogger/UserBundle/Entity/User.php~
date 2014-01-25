@@ -135,12 +135,12 @@ class User implements AdvancedUserInterface, Serializable, EquatableInterface {
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Blogger\FriendBundle\Entity\FriendRequest", mappedBy="requestBy")
+     * @ORM\OneToMany(targetEntity="Blogger\FriendBundle\Entity\FriendRequest", mappedBy="requestTo")
      */
     protected $getFriendRequests;
     
     /**
-     * @ORM\OneToMany(targetEntity="Blogger\FriendBundle\Entity\FriendRequest", mappedBy="requestTo")
+     * @ORM\OneToMany(targetEntity="Blogger\FriendBundle\Entity\FriendRequest", mappedBy="requestBy")
      */
     protected $sendFriendRequests;
     
@@ -656,69 +656,4 @@ class User implements AdvancedUserInterface, Serializable, EquatableInterface {
 
 
 
-    /**
-     * Add getFriendRequests
-     *
-     * @param \Blogger\FriendBundle\Entity\FriendRequest $getFriendRequests
-     * @return User
-     */
-    public function addGetFriendRequest(\Blogger\FriendBundle\Entity\FriendRequest $getFriendRequests)
-    {
-        $this->getFriendRequests[] = $getFriendRequests;
-    
-        return $this;
-    }
-
-    /**
-     * Remove getFriendRequests
-     *
-     * @param \Blogger\FriendBundle\Entity\FriendRequest $getFriendRequests
-     */
-    public function removeGetFriendRequest(\Blogger\FriendBundle\Entity\FriendRequest $getFriendRequests)
-    {
-        $this->getFriendRequests->removeElement($getFriendRequests);
-    }
-
-    /**
-     * Get getFriendRequests
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getGetFriendRequests()
-    {
-        return $this->getFriendRequests;
-    }
-
-    /**
-     * Add sendFriendRequests
-     *
-     * @param \Blogger\FriendBundle\Entity\FriendRequest $sendFriendRequests
-     * @return User
-     */
-    public function addSendFriendRequest(\Blogger\FriendBundle\Entity\FriendRequest $sendFriendRequests)
-    {
-        $this->sendFriendRequests[] = $sendFriendRequests;
-    
-        return $this;
-    }
-
-    /**
-     * Remove sendFriendRequests
-     *
-     * @param \Blogger\FriendBundle\Entity\FriendRequest $sendFriendRequests
-     */
-    public function removeSendFriendRequest(\Blogger\FriendBundle\Entity\FriendRequest $sendFriendRequests)
-    {
-        $this->sendFriendRequests->removeElement($sendFriendRequests);
-    }
-
-    /**
-     * Get sendFriendRequests
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getSendFriendRequests()
-    {
-        return $this->sendFriendRequests;
-    }
 }

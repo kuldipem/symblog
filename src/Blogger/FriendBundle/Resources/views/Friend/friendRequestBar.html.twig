@@ -1,0 +1,30 @@
+{% block friendSuggestionBar %}
+<section class="section">
+    <header>
+        <h3>Invited to Give Inspiration</h3>
+    </header>
+    <ul class="inpierd-by-user-list">
+        {% for request in requests %}
+        <li>
+            <div style="display: block;">
+                <div style="display: inline-block;">
+                    {% if request.requestBy.image is not empty  %}
+                    <img class="profile-img square" src="/upload/user_images{{ asset(request.requestBy.image) }}" />
+                    {% else %}
+                    <img class="profile-img square" src="/images/def_img_pic.jpeg" />
+                    {% endif %}
+                </div>
+                <div class="user-detail">
+                    <span><a href="#" >{{ request.requestBy.firstname }} {{ request.requestBy.lastname }}</a></span>
+                    <span class="muted"> Post  {{ request.requestBy.blogs|length }}  ,Comments {{ request.requestBy.comments|length }} ,Likes {{ request.requestBy.likes|length }}</span>
+                    <span class="muted"> Join  {{ request.requestBy.created|created_ago }} </span>
+                    <span class="muted"> Send  before {{ request.created|created_ago }} </span>
+                </div>
+            </div>
+        </li>
+        {% else %}
+        <li>There are no request</li>
+        {% endfor %}
+    </ul>
+</section>
+{% endblock %}

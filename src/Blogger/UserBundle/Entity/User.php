@@ -135,12 +135,12 @@ class User implements AdvancedUserInterface, Serializable, EquatableInterface {
 
 
     /**
-     * @ORM\OneToMany(targetEntity="Blogger\FriendBundle\Entity\FriendRequest", mappedBy="requestBy")
+     * @ORM\OneToMany(targetEntity="Blogger\FriendBundle\Entity\FriendRequest", mappedBy="requestTo")
      */
     protected $getFriendRequests;
     
     /**
-     * @ORM\OneToMany(targetEntity="Blogger\FriendBundle\Entity\FriendRequest", mappedBy="requestTo")
+     * @ORM\OneToMany(targetEntity="Blogger\FriendBundle\Entity\FriendRequest", mappedBy="requestBy")
      */
     protected $sendFriendRequests;
     
@@ -653,6 +653,7 @@ class User implements AdvancedUserInterface, Serializable, EquatableInterface {
     public function getUpdated() {
         return $this->updated;
     }
+
 
 
 

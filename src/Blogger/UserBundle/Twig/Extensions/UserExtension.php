@@ -44,14 +44,14 @@ class UserExtension extends Twig_Extension {
     }
 
     public function isAuthorized($security_context) {
-        if ($security_context->isGranted('IS_AUTHENTICATED_FULLY') || $security_context->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+        if ($security_context!=NULL || $security_context->isGranted('IS_AUTHENTICATED_FULLY') || $security_context->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             return true;
         }
         return false;
     }
 
     public function isFullyAuthorized($user,$security_context) {
-        if ($security_context->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($security_context!=NULL || $security_context->isGranted('IS_AUTHENTICATED_FULLY')) {
             return true;
         }
         return false;

@@ -31,14 +31,14 @@ class FriendRequest {
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Blogger\UserBundle\Entity\User", inversedBy="getFriendRequests" )
+     * @ORM\ManyToOne(targetEntity="Blogger\UserBundle\Entity\User", inversedBy="sendFriendRequests" )
      * @ORM\JoinColumn(referencedColumnName="id", name="request_by_user_id" )
      */
     private $requestBy;
 
   
     /**
-     * @ORM\ManyToOne(targetEntity="Blogger\UserBundle\Entity\User", inversedBy="sendFriendRequests" )
+     * @ORM\ManyToOne(targetEntity="Blogger\UserBundle\Entity\User", inversedBy="getFriendRequests" )
      * @ORM\JoinColumn(referencedColumnName="id", name="request_to_user_id" )
      */
     private $requestTo;
@@ -69,7 +69,6 @@ class FriendRequest {
     }
 
    
-
 
     /**
      * Get id
@@ -149,7 +148,6 @@ class FriendRequest {
     {
         return $this->updated;
     }
-
 
     /**
      * Set requestBy
