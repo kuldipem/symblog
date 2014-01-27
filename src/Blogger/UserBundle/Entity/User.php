@@ -180,6 +180,7 @@ class User implements AdvancedUserInterface, Serializable, EquatableInterface {
         $this->roles = array('ROLE_USER');
         $this->setCreated(new DateTime());
         $this->setUpdated(new DateTime());
+        $this->image='';
     }
 
     /**

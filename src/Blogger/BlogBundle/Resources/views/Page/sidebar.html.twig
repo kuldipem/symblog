@@ -13,13 +13,13 @@
 </section>
 
 {% block friendSuggestionBar %}
-     {% if app.user|is_authorized %}
+     {% if app.security|is_authorized %}
          {{ render_hinclude(controller("BloggerFriendBundle:Friend:friendSuggestionBar")) }}
      {% endif %}
 {% endblock %}
 
 {% block friendRequestBar %}
-    {% if app.user|is_authorized %}
+    {% if app.security|is_authorized %}
         {{ render_hinclude(controller("BloggerFriendBundle:Friend:friendRequestBar")) }}
     {% endif%}
 {% endblock %}
