@@ -29,9 +29,10 @@
         "phpunit/phpunit-story": "*",
         "stfalcon/tinymce-bundle": "dev-master",
         "knplabs/knp-paginator-bundle": "2.3.3",
-        "sonata-project/admin-bundle": "dev-master",
-        "twbs/bootstrap": "v3.0.3",
-        "friendsofsymfony/jsrouting-bundle": "@stable"
+        "sonata-project/admin-bundle": "2.2.9",
+        "twbs/bootstrap": "v3.0.2",
+        "friendsofsymfony/jsrouting-bundle": "@stable",
+        "friendsofsymfony/user-bundle" : "~2.0@dev"
     },
     "scripts": {
         "post-install-cmd": [
@@ -60,7 +61,7 @@
             "file": "app/config/parameters.yml"
         },
         "branch-alias": {
-            "dev-master": "2.3-dev"
+           
         }
     }
 }
