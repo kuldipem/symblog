@@ -17,9 +17,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Blogger\BlogBundle\Entity\Enquiry;
 use Blogger\BlogBundle\Form\EnquiryType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
-use Blogger\BlogBundle\Controller\TokenAuthenticatedController;
 
-class PageController extends Controller implements TokenAuthenticatedController {
+
+class PageController extends Controller {
 
 
     public function barAction(){
