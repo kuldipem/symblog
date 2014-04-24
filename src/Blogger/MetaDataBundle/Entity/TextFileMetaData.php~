@@ -1,0 +1,40 @@
+<?php
+
+namespace Blogger\MetaDataBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Blogger\MetaDataBundle\Entity\MetaData;
+
+/**
+ * VideoMetaData
+ *
+ * @ORM\Table(name="text_file_meta_data")
+ * @ORM\Entity(repositoryClass="Blogger\MetaDataBundle\Entity\Repository\TextFileMetaDataRepository")
+ */
+class TextFileMetaData extends MetaData
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="line", type="integer")
+     */
+    private $line;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="cols", type="integer")
+     */
+    private $cols;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="encoding", type="string")
+     */
+    private $encoding;
+
+
+
+}
+

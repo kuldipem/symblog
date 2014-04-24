@@ -1,0 +1,115 @@
+{% extends 'BloggerBlogBundle::layout.html.twig' %}
+
+{% block title %} Home {% endblock %}
+
+{% block body %}
+
+    {#<nav class="pagination header">
+        <ul>
+            <li>{{ blogs.getTotalItemCount }}</li>
+            <li>{{ knp_pagination_sortable(blogs, 'Id', 'b.id') }}</li>
+            <li{% if blogs.isSorted('b.title') %} class="sorted"{% endif %}>{{ knp_pagination_sortable(blogs, 'Title', 'b.title') }}</li>
+        </ul>
+ 
+    </nav>#}
+
+    {% for blog in blogs %}
+<article class="blog">
+    <div class="date"><time datetime="{{ blog.created|date('c') }}">{{ blog.created|date('l, F j, Y') }}</time></div>
+    <header>
+        <h2><a href="{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id, 'slug': blog.slug }) }}">{{ blog.title }}</a></h2>
+    </header>
+
+    <img class="lazy" src="{{ asset("images/ajax-loader.gif")  }}" data-src="{{ asset(['images/', blog.image]|join) }}" />
+    <div class="snippet">
+        <p>{{ blog.blog(500)|raw }}</p>
+        <p class="continue"><a href="{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id, 'slug': blog.slug }) }}">Continue reading...</a></p>
+    </div>
+
+    <footer class="meta" data-blog-id="{{ blog.id }}" >
+        <p>Likes : <a data-likes-counter="{{ blog.id }}" href="#">{{ blog.likes|length }}</a></p>
+        <p>Comments: <a data-comments-counter="{{ blog.id }}" href="{{ path('BloggerBlogBundle_blog_show', { 'id': blog.id, 'slug': blog.slug }) }}#comments">{{ blog.comments|length }}</a></p>
+        <p>Posted by <span class="highlight">{{ blog.user|is_me(app.user) }}</span> at {{ blog.created|date('h:iA') }}</p>
+        <p>Tags: <span class="highlight">{{ blog.tags }}</span></p>
+        <p>
+                 {% include 'BloggerBlogBundle:Likes:index.html.twig' with { 'blog': blog } %}
+        </p>        
+
+    </footer>
+</article>
+    {% else %}
+<p>There are no blog entries for symblog</p>
+    {% endfor %}
+
+<nav class="pagination footer">
+    <ul>
+        <li>{{ knp_pagination_render(blogs) }}</li>
+    </ul>
+</nav>  
+
+{% endblock %}
+{% block javascripts %}
+
+{{ parent() }}
+    
+    {% javascripts '@BloggerFriendBundle/Resources/public/js/*' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+    
+<script>
+    $(document).ready(function() {
+        $(".lazy").lazy({
+            enableThrottle: true,
+            threshold: 500,
+            effect: "fadeIn",
+            effectTime: 1500
+        });
+
+    });
+
+    var likesArrayQ;
+
+
+    /*
+     * @param event     : Object which fires event
+     * @var   objectId  : Anything that can be liked , here it is Blog
+     * @var   subjectId : Id of Who Intrect with Object.
+     * @var   status    : Pass true to like or Pass False to Unlike Liked blog.
+     * 
+     */
+    $(document).ready(function() {
+        $("[data-ui='like']").on("click", function(event) {
+            $_self = $(this);
+            event.preventDefault();
+            var objectId = $(this).attr("data-ui-like-for-blog");
+            var subjectId = $(this).attr("data-liker");
+            var like_status = $(this).attr("data-i-like");
+
+            var ajaxUrl = "{{ path("BloggerBlogBundle_blog_likes") }}";
+            likesArrayQ = $.ajax({
+                url: ajaxUrl,
+                data: {'blog_id': objectId, 'user_id': subjectId, 'status': like_status},
+                success: function(data, status, xhr) {
+                    if (like_status === "UNLIKE") {
+                        $($_self).attr("data-i-like", "LIKE");
+                        $($_self).text("UNLIKE").fadeIn();
+                    } else {
+                        $($_self).attr("data-i-like", "UNLIKE");
+                        $($_self).text("LIKE").fadeIn();
+
+                    }
+                    likesArrayQ = null;
+                }
+            });
+        });
+    });
+
+
+
+    window.onbeforeunload = function() {
+        if (likesArrayQ !== null) {
+            //return false; // to propmt user to close the window if ajax request is not completed yet
+        }
+    };
+</script>
+{% endblock %}

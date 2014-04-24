@@ -1,0 +1,16 @@
+{% extends '::base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    {% endblock %}
+
+
+
+
+{% block sidebar %}
+        {{ render(controller( 'BloggerBlogBundle:Page:sidebar')) }}
+{% endblock %}
+{% block javascripts %}
+{{ parent()}}
+{% endblock %}

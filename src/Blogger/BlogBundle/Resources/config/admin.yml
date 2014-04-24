@@ -1,0 +1,46 @@
+#Blogger/BlogBundle/Resources/config/admin.yml
+services:
+    sonata.admin.blog:
+        class: Blogger\BlogBundle\Admin\BlogAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Content", label: "Blog" }
+        arguments:
+            - ~
+            - Blogger\BlogBundle\Entity\Blog
+            - ~
+        calls:
+            - [ setTranslationDomain, [BloggerBlogBundle]]
+            - [ setTemplates,[[ create , :CRUD:edit.html.twig ],[ edit , :CRUD:edit.html.twig ]] ]
+
+    sonata.admin.enquiry:
+        class: Blogger\BlogBundle\Admin\EnquiryAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Content", label: "Enquiry" }
+        arguments:
+            - ~
+            - Blogger\BlogBundle\Entity\Enquiry
+            - ~
+        calls:
+            - [ setTranslationDomain, [BloggerBlogBundle]]
+
+    sonata.admin.comment:
+        class: Blogger\BlogBundle\Admin\CommentAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Content", label: "Comments" }
+        arguments:
+            - ~
+            - Blogger\BlogBundle\Entity\Comment
+            - ~
+        calls:
+            - [ setTranslationDomain, [BloggerBlogBundle]]
+    
+    sonata.admin.likes:
+        class: Blogger\BlogBundle\Admin\LikesAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Content", label: "Likes" }
+        arguments:
+            - ~
+            - Blogger\BlogBundle\Entity\Likes
+            - ~
+        calls:
+            - [ setTranslationDomain, [BloggerBlogBundle]]

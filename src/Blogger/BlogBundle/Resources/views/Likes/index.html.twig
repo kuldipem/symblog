@@ -1,0 +1,15 @@
+ {% set likeIdArray=[] %}
+
+{% for like in blog.likes %}
+                {% set  likeIdArray=likeIdArray|merge([like.user.id]) %}
+ {% endfor %}
+
+ {% if app.user is not null  %}
+        {% if app.user.id in likeIdArray %}
+                <a href="" data-ui="like" data-i-like="LIKE" data-liker="{{ app.user.id }}" data-ui-like-for-blog="{{blog.id}}"  class="like" >UnLike </a>
+        {% else %}
+                <a href="" data-ui="like" data-i-like="UNLIKE" data-liker="{{ app.user.id }}" data-ui-like-for-blog="{{blog.id}}" class="like" data-array="{{ likeIdArray|json_encode() }}" >Like </a>
+        {% endif %}
+ {% else %}
+                <a onclick="return confirm('Do you want to login ?');" href="{{ path("login") }}"  class="like" > Like </a>        
+ {% endif %}

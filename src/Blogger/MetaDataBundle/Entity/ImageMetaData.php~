@@ -1,0 +1,38 @@
+<?php
+
+namespace Blogger\MetaDataBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Blogger\MetaDataBundle\Entity\MetaData;
+
+/**
+ * ImageMetaData
+ *
+ * @ORM\Table(name="image_meta_data")
+ * @ORM\Entity(repositoryClass="Blogger\MetaDataBundle\Entity\Repository\ImageMetaDataRepository")
+ */
+class ImageMetaData extends MetaData
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="height", type="integer")
+     */
+    private $height;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="width", type="integer")
+     */
+    private $width;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="dpi", type="integer")
+     */
+    private $dpi;
+
+}
+

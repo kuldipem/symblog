@@ -1,0 +1,17 @@
+User:
+  first_name:
+    - NotBlank: true
+  middle_name:
+    - NotBlank: false
+  last_name:
+    - NotBlank: true
+  sex:
+    - NotBlank: true
+  birthdate:
+    - NotBlank: true
+  user_name:
+    - NotBlank: true
+  password:
+    - NotBlank: true
+   
+ 

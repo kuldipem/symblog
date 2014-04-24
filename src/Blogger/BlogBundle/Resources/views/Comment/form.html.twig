@@ -1,0 +1,8 @@
+
+<form id="comment_form" action="{{ path('BloggerBlogBundle_comment_new', { 'blog_id' : comment.blog.id } ) }}" method="post" {{ form_enctype(form) }} class="blogger">
+    {{ form_widget(form) }}
+        <p>
+            <input class="blogger-button" type="submit" id="ajax_send_comment" value="Submit">
+        </p>
+              
+</form>

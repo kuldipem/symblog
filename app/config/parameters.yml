@@ -1,0 +1,17 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_driver: pdo_mysql
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: kuldip_symblog
+    database_user: kuldip
+    database_password: kuldipm9
+    mailer_transport: gmail
+    mailer_host: smtp.gmail.com
+    mailer_user: test@gmail.com
+    mailer_password: test
+    locale: en
+    secret: 43b41b0220a8219e315c467495420557dd4a29e5
+    tokens:
+        client1: pass1
+        client2: pass2

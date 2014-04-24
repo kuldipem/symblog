@@ -1,0 +1,12 @@
+services:
+    sonata.admin.user:
+        class: Blogger\UserBundle\Admin\UserAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Content", label: "User" }
+        arguments:
+            - ~
+            - Blogger\UserBundle\Entity\User
+            - ~
+        calls:
+            - [ setTranslationDomain, [BloggerUserBundle]]
+

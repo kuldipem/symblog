@@ -1,0 +1,15 @@
+{% extends 'BloggerBlogBundle::layout.html.twig' %}
+{% block title %}
+  edit blog
+{% endblock%}
+{% block body %}
+    {{ form(blog,{'attr': {'novalidate': 'novalidate', 'class':'blogger'}} ) }}
+<div class="blogger-notice info">
+    * Multiple tags can be seprated with ',' .
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ tinymce_init() }}
+{% endblock %}

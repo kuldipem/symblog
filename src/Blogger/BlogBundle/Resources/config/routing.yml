@@ -1,0 +1,111 @@
+BloggerBlogBundle_tags_get:
+    pattern: /tags/gettags
+    defaults: { _controller: BloggerBlogBundle:Tags:getTags }
+    
+
+
+BloggerBlogBundle_advance_search:
+    pattern: /advanceSearch
+    defaults: { _controller: BloggerBlogBundle:Search:AdvanceSearch }
+    requirements:
+      _method: GET
+
+BloggerBlogBundle_search_search:
+    pattern: /search
+    defaults: { _controller: BloggerBlogBundle:Search:search }
+    requirements:
+      _method: GET
+#      fieldName: \w+
+#      keyword: \w+
+
+BloggerBlogBundle_blog_delete_my_blog:
+    pattern: myblog/delete/{id}
+    defaults: { _controller: BloggerBlogBundle:Blog:deleteMyBlog }
+    requirements:
+        id: \d+
+
+BloggerBlogBundle_blog_edit_my_blog:
+    pattern: myblog/{slug}/edit
+    defaults: { _controller: BloggerBlogBundle:Blog:editMyBlog }
+    
+        
+BloggerBlogBundle_blog_create_my_blog:
+    pattern: myblog/create
+    defaults: { _controller: BloggerBlogBundle:Blog:createMyBlog }
+
+    
+BloggerBlogBundle_blog_my_blog:
+    pattern:  myblog
+    defaults: { _controller: BloggerBlogBundle:Blog:myBlog }
+    requirements:
+        _method:  GET
+
+BloggerBlogBundle_blog_tag_filter:
+    pattern:  blog/tag/{tag}
+    defaults: { _controller: BloggerBlogBundle:Blog:tagFilter }
+    requirements:
+        _method:  GET
+
+BloggerBlogBundle_blog_likes:
+    pattern:  /likes/{blog_id}/{user_id}/{status}
+    defaults: { _controller: BloggerBlogBundle:Likes:like , blog_id: 0 , user_id: 0 ,status: UNLIKE }
+    requirements:
+        blog_id: \d+
+        user_id: \d+
+        status: LIKE | UNLIKE
+
+BloggerBlogBundle_comment_delete:
+    pattern:  /delete/{blog_id}/{comment_id}
+    defaults: { _controller: BloggerBlogBundle:Comment:delete }
+    requirements:
+        _method:  GET
+        blog_id: \d+
+        comment_id: \d+
+
+BloggerBlogBundle_comment_new:
+    pattern:  /new/{blog_id}
+    defaults: { _controller: BloggerBlogBundle:Comment:new }
+    requirements:
+        blog_id: \d+
+
+BloggerBlogBundle_comment_create:
+    pattern:  /comment/{blog_id}
+    defaults: { _controller: BloggerBlogBundle:Comment:create }
+    requirements:
+        _method:  POST
+        blog_id: \d+
+        
+    
+BloggerBlogBundle_blog_create:
+    pattern:  /{id}/{slug}
+    defaults: { _controller: BloggerBlogBundle:Blog:show }
+    requirements:
+        _method:  GET
+        id: \d+
+
+    
+BloggerBlogBundle_blog_show:
+    pattern:  /{id}/{slug}
+    defaults: { _controller: BloggerBlogBundle:Blog:show }
+    requirements:
+        _method:  GET
+        id: \d+
+      
+BloggerBlogBundle_homepage:
+    pattern:  /
+    defaults: { _controller: BloggerBlogBundle:Page:index }
+    requirements:
+        _method:  GET
+        
+BloggerBlogBundle_about:
+    pattern:  /about
+    defaults: { _controller: BloggerBlogBundle:Page:about }
+    requirements:
+        _method:  GET
+        
+BloggerBlogBundle_contact:
+    pattern:  /contact
+    defaults: { _controller: BloggerBlogBundle:Page:contact }
+    requirements:
+        _method:  GET|POST
+

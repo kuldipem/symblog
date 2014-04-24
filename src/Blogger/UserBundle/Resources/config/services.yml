@@ -1,0 +1,7 @@
+services:
+    blogger_user.twig.extension:
+        class: Blogger\UserBundle\Twig\Extensions\UserExtension
+        tags:
+            - { name: twig.extension } 
+        
+        

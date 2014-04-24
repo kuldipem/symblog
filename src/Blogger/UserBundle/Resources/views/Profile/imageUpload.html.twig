@@ -1,0 +1,17 @@
+{% extends 'BloggerBlogBundle::layout.html.twig' %}
+{% block title %}
+  Profile Image
+{% endblock%}
+
+{% block body %}
+  <div style="margin: 10px auto; text-align: center;">
+      <img  class="profile-img" src="{{ asset(profile_img) }}"  />
+  </div>
+    
+    {{ form(profile,{'attr': {'novalidate': 'novalidate', 'class':'blogger'}} ) }}
+    
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

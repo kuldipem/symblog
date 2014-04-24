@@ -1,0 +1,67 @@
+BloggerUserBundle_reset_password_email_link:
+    pattern: /resetpassword/confirm/{tech}
+    defaults: { _controller: BloggerUserBundle:Security:confirmResetCode }
+    requirements:
+      tech: link|code
+
+
+BloggerUserBundle_reset_newpassword:
+    pattern: /resetpassword/{id}/newpassword/{resetcode}
+    defaults: { _controller: BloggerUserBundle:Security:newPassword }
+    requirements:
+      id: \d+
+    
+#BloggerUserBundle_reset_password:
+#    pattern: /resetpassword/{using}
+#    defaults: { _controller: BloggerUserBundle:Security:resetPassword, using: email }
+#    requirements:
+#      using: email|question   
+
+BloggerUserBundle_init_reset_password:
+    pattern: /resetpassword
+    defaults: { _controller: BloggerUserBundle:Security:resetPassword }
+
+
+
+BloggerUserBundle_change_password:
+    pattern: /user/changepassword
+    defaults: { _controller: BloggerUserBundle:User:chanegPassword }
+
+BloggerUserBundle_profile_image:
+    pattern: /profile/image
+    defaults: { _controller: BloggerUserBundle:Profile:image }
+
+
+
+BloggerUserBundle_profile:
+    pattern: /profile
+    defaults: { _controller: BloggerUserBundle:Profile:index }
+
+
+BloggerUserBundle_user:
+    pattern: /user
+    defaults: { _controller: BloggerUserBundle:User:index }
+    requirements:
+      _method: GET
+
+
+register:
+    pattern: /register
+    defaults: { _controller: BloggerUserBundle:User:register }
+
+handle_register:
+    pattern: /handle_register
+    defaults: { _controller: BloggerUserBundle:User:handleRegister }
+    
+login:
+    pattern: /login
+    defaults: { _controller: BloggerUserBundle:User:login }
+
+login_check:
+    pattern: /login_check
+
+logout:
+    pattern: /logout
+    defaults: { _controller: BloggerUserBundle:User:logout }
+    
+

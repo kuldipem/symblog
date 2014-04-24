@@ -1,0 +1,33 @@
+<?php
+
+namespace Blogger\MetaDataBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Blogger\MetaDataBundle\Entity\MetaData;
+
+/**
+ * VideoMetaData
+ *
+ * @ORM\Table(name="video_meta_data")
+ * @ORM\Entity(repositoryClass="Blogger\MetaDataBundle\Entity\Repository\VideoMetaDataRepository")
+ */
+class VideoMetaData extends MetaData
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="duration", type="integer")
+     */
+    private $duration;
+
+    /**
+     * @var integer
+     * frame per second rate 
+     *
+     * @ORM\Column(name="fps", type="integer")
+     */
+    private $fps;
+
+
+}
+
